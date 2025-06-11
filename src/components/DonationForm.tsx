@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const DonationForm = () => {
   const [selectedAmount, setSelectedAmount] = useState(50);
@@ -89,10 +90,12 @@ const DonationForm = () => {
           </div>
         </div>
 
-        <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-3">
-          <Heart className="w-4 h-4 mr-2" />
-          Donate now
-        </Button>
+        <Link to="/donate" className="block">
+          <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-3">
+            <Heart className="w-4 h-4 mr-2" />
+            Donate now
+          </Button>
+        </Link>
 
         <p className="text-xs text-gray-500 text-center">
           By continuing, you agree with GoFundMe's{" "}
