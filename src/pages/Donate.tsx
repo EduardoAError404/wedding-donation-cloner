@@ -4,250 +4,232 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Heart, ArrowLeft, Shield, CreditCard, Lock } from "lucide-react";
+import { ArrowLeft, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Donate = () => {
-  const [donationAmount, setDonationAmount] = useState("50");
+  const [donationAmount, setDonationAmount] = useState("100");
   const [customAmount, setCustomAmount] = useState("");
-  const [tipAmount, setTipAmount] = useState("3");
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [showTip, setShowTip] = useState(false);
+  const [tipPercentage, setTipPercentage] = useState("17.5");
+  const [paymentMethod, setPaymentMethod] = useState("paypal");
+  const [showAnonymous, setShowAnonymous] = useState(false);
+  const [receiveUpdates, setReceiveUpdates] = useState(false);
 
-  const presetAmounts = ["25", "50", "100", "250", "500"];
-  const tipOptions = ["0", "3", "5", "10"];
+  const presetAmounts = ["50", "100", "200", "300", "500", "1000"];
 
   const finalAmount = customAmount || donationAmount;
-  const totalAmount = parseFloat(finalAmount) + parseFloat(tipAmount);
+  const tipAmount = (parseFloat(finalAmount) * parseFloat(tipPercentage)) / 100;
+  const totalAmount = parseFloat(finalAmount) + tipAmount;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/" className="flex items-center text-gray-600 hover:text-gray-900 mr-6">
                 <ArrowLeft className="h-5 w-5 mr-2" />
-                Back
+                Campanha
               </Link>
-              <h1 className="text-2xl font-bold text-green-600">GoFundMe</h1>
+              <h1 className="text-2xl font-bold text-green-500">gofundme</h1>
+            </div>
+            <div className="text-sm text-gray-600">
+              Já tem uma conta? <a href="#" className="text-green-500 hover:underline">Entrar</a>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Side - Campaign Info */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                  E
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold">Enilio & Marta Wedding</h2>
-                  <p className="text-gray-600">Organized by Enilio Martinez</p>
-                </div>
-              </div>
-              
-              <div className="aspect-video bg-gradient-to-br from-pink-100 to-purple-100 rounded-lg overflow-hidden mb-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=450&fit=crop"
-                  alt="Wedding couple"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>$12,450 raised</span>
-                  <span>$20,000 goal</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-green-600 h-2 rounded-full" style={{ width: '62%' }}></div>
-                </div>
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>127 donations</span>
-                  <span>18 days left</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Security Info */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start space-x-3">
-                <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
-                <div>
-                  <h3 className="font-medium text-blue-900">Your donation is protected</h3>
-                  <p className="text-sm text-blue-700 mt-1">
-                    We guarantee you a full refund for up to a year in the rare case that fraud occurs.
-                  </p>
-                </div>
-              </div>
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          {/* Campaign Info */}
+          <div className="flex items-start space-x-4 mb-6">
+            <img 
+              src="https://images.unsplash.com/photo-1519741497674-611481863552?w=80&h=80&fit=crop&crop=face"
+              alt="Enilio & Marta"
+              className="w-20 h-20 rounded-lg object-cover"
+            />
+            <div>
+              <h2 className="text-lg font-medium text-gray-900">
+                Você está apoiando Enilio & Marta wedding
+              </h2>
+              <p className="text-sm text-gray-600">
+                Sua doação beneficiará Ines Gaspar
+              </p>
             </div>
           </div>
 
-          {/* Right Side - Donation Form */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-2xl font-bold mb-6">Enter your donation</h2>
+          {/* Amount Selection */}
+          <div className="mb-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Digite sua doação</h3>
+            
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {presetAmounts.map((amount) => (
+                <Button
+                  key={amount}
+                  variant={donationAmount === amount && !customAmount ? "default" : "outline"}
+                  onClick={() => {
+                    setDonationAmount(amount);
+                    setCustomAmount("");
+                  }}
+                  className={`relative ${donationAmount === amount && !customAmount ? "bg-green-500 hover:bg-green-600 text-white" : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"}`}
+                >
+                  €{amount}
+                  {donationAmount === amount && !customAmount && amount === "100" && (
+                    <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs px-2 py-1 rounded">
+                      SUGERIDO
+                    </span>
+                  )}
+                </Button>
+              ))}
+            </div>
+            
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">€</span>
+              <Input
+                type="text"
+                placeholder=".00"
+                value={customAmount}
+                onChange={(e) => setCustomAmount(e.target.value)}
+                className="pl-12 pr-16 text-lg h-14 text-right border-gray-300"
+              />
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">EUR</span>
+            </div>
+          </div>
 
-            <div className="space-y-6">
-              {/* Amount Selection */}
+          {/* Tip Section */}
+          <div className="mb-6">
+            <h3 className="text-base font-medium text-gray-900 mb-2">Gorjeta para os serviços do GoFundMe</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              A tarifa da plataforma GoFundMe para os organizadores é 0%. O GoFundMe continua a 
+              oferecer seus serviços graças aos doadores, que doam uma quantia opcional aqui:
+            </p>
+            
+            <div className="text-center mb-4">
+              <span className="text-2xl font-bold text-gray-900">{tipPercentage}%</span>
+            </div>
+            
+            <div className="text-center">
+              <button className="text-green-500 underline text-sm">
+                Inserir gorjeta personalizada
+              </button>
+            </div>
+          </div>
+
+          {/* Payment Method */}
+          <div className="mb-6">
+            <h3 className="text-base font-medium text-gray-900 mb-4">Forma de pagamento</h3>
+            
+            <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                <RadioGroupItem value="paypal" id="paypal" />
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">P</span>
+                  </div>
+                  <Label htmlFor="paypal" className="flex-1">PayPal</Label>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                <RadioGroupItem value="google" id="google" />
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-white border rounded flex items-center justify-center">
+                    <span className="text-xs">G</span>
+                  </div>
+                  <Label htmlFor="google" className="flex-1">Google Pay</Label>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3 p-3 border rounded-lg">
+                <RadioGroupItem value="card" id="card" />
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center">
+                    <span className="text-xs">💳</span>
+                  </div>
+                  <Label htmlFor="card" className="flex-1">Crédito ou débito</Label>
+                </div>
+              </div>
+            </RadioGroup>
+          </div>
+
+          {/* Checkboxes */}
+          <div className="mb-6 space-y-3">
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="anonymous"
+                checked={showAnonymous}
+                onChange={(e) => setShowAnonymous(e.target.checked)}
+                className="mt-1"
+              />
+              <label htmlFor="anonymous" className="text-sm text-gray-700">
+                Não mostrar as minhas informações publicamente na arrecadação de fundos.
+              </label>
+            </div>
+            
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="updates"
+                checked={receiveUpdates}
+                onChange={(e) => setReceiveUpdates(e.target.checked)}
+                className="mt-1"
+              />
+              <label htmlFor="updates" className="text-sm text-gray-700">
+                Sim, quero receber atualizações do GoFundMe sobre como mudar a vida das pessoas. Pode cancelar a assinatura em qualquer altura.
+              </label>
+            </div>
+          </div>
+
+          {/* Total Summary */}
+          <div className="mb-6 space-y-2">
+            <h3 className="text-base font-medium text-gray-900 mb-3">Sua doação</h3>
+            
+            <div className="flex justify-between text-sm">
+              <span>Sua doação</span>
+              <span>€{parseFloat(finalAmount).toFixed(2)}</span>
+            </div>
+            
+            <div className="flex justify-between text-sm">
+              <span>Gorjeta para o GoFundMe</span>
+              <span>€{tipAmount.toFixed(2)}</span>
+            </div>
+            
+            <hr className="my-3" />
+            
+            <div className="flex justify-between font-medium">
+              <span>Total devido hoje</span>
+              <span>€{totalAmount.toFixed(2)}</span>
+            </div>
+          </div>
+
+          {/* PayPal Button */}
+          <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 py-4 text-lg font-medium mb-4">
+            PayPal
+          </Button>
+
+          {/* Terms */}
+          <p className="text-xs text-gray-500 text-center mb-6">
+            Ao clicar em 'PayPal', você concorda com os{" "}
+            <a href="#" className="text-blue-600 hover:underline">Termos de Serviço</a> e{" "}
+            <a href="#" className="text-blue-600 hover:underline">Aviso de Privacidade</a> do 
+            GoFundMe. Saiba mais sobre{" "}
+            <a href="#" className="text-blue-600 hover:underline">preços e tarifas</a>.
+          </p>
+
+          {/* Protection Notice */}
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <Shield className="h-5 w-5 text-gray-600 mt-0.5" />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  How much would you like to donate?
-                </label>
-                <div className="grid grid-cols-3 gap-3 mb-4">
-                  {presetAmounts.map((amount) => (
-                    <Button
-                      key={amount}
-                      variant={donationAmount === amount && !customAmount ? "default" : "outline"}
-                      onClick={() => {
-                        setDonationAmount(amount);
-                        setCustomAmount("");
-                      }}
-                      className={donationAmount === amount && !customAmount ? "bg-green-600 hover:bg-green-700" : ""}
-                    >
-                      ${amount}
-                    </Button>
-                  ))}
-                </div>
-                
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">$</span>
-                  <Input
-                    type="number"
-                    placeholder="Other amount"
-                    value={customAmount}
-                    onChange={(e) => setCustomAmount(e.target.value)}
-                    className="pl-8 text-lg h-12"
-                  />
-                </div>
+                <h3 className="font-medium text-gray-900">O GoFundMe protege a sua doação</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Garantimos um reembolso total por até um ano no caso raro de ocorrência de 
+                  fraude. <a href="#" className="text-green-500 hover:underline">Consulte nossa Garantia de Doação GoFundMe</a>.
+                </p>
               </div>
-
-              {/* Tip Section */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-medium">Tip GoFundMe Services</span>
-                  <Button 
-                    variant="link" 
-                    className="p-0 h-auto text-sm"
-                    onClick={() => setShowTip(!showTip)}
-                  >
-                    Learn more
-                  </Button>
-                </div>
-                
-                {showTip && (
-                  <p className="text-sm text-gray-600 mb-3">
-                    GoFundMe has a 0% platform fee for organizers. A voluntary tip helps keep GoFundMe running.
-                  </p>
-                )}
-
-                <RadioGroup value={tipAmount} onValueChange={setTipAmount} className="grid grid-cols-4 gap-2">
-                  {tipOptions.map((tip) => (
-                    <div key={tip} className="flex items-center space-x-2">
-                      <RadioGroupItem value={tip} id={`tip-${tip}`} className="sr-only" />
-                      <Label 
-                        htmlFor={`tip-${tip}`} 
-                        className={`cursor-pointer border rounded-lg p-2 text-center w-full ${
-                          tipAmount === tip ? 'bg-green-100 border-green-500' : 'bg-white border-gray-300'
-                        }`}
-                      >
-                        ${tip}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
-
-              {/* Personal Information */}
-              <div className="space-y-4">
-                <h3 className="font-medium">Personal information</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="firstName">First name</Label>
-                    <Input
-                      id="firstName"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="First name"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="lastName">Last name</Label>
-                    <Input
-                      id="lastName"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      placeholder="Last name"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email address"
-                  />
-                </div>
-              </div>
-
-              {/* Payment Method */}
-              <div>
-                <h3 className="font-medium mb-3">Payment method</h3>
-                <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                    <RadioGroupItem value="card" id="card" />
-                    <CreditCard className="h-5 w-5" />
-                    <Label htmlFor="card" className="flex-1">Credit or debit card</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-
-              {/* Total Summary */}
-              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                <div className="flex justify-between">
-                  <span>Your donation</span>
-                  <span className="font-medium">${finalAmount}</span>
-                </div>
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>GoFundMe tip</span>
-                  <span>${tipAmount}</span>
-                </div>
-                <hr className="my-2" />
-                <div className="flex justify-between font-semibold text-lg">
-                  <span>Total due today</span>
-                  <span>${totalAmount.toFixed(2)}</span>
-                </div>
-              </div>
-
-              {/* Donate Button */}
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-4 text-lg">
-                <Heart className="w-5 h-5 mr-2" />
-                Donate ${totalAmount.toFixed(2)}
-              </Button>
-
-              {/* Security Notice */}
-              <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                <Lock className="h-4 w-4" />
-                <span>Your payment information is secure and encrypted</span>
-              </div>
-
-              {/* Terms */}
-              <p className="text-xs text-gray-500 text-center">
-                By continuing, you agree with GoFundMe's{" "}
-                <a href="#" className="text-blue-600 hover:underline">terms</a> and{" "}
-                <a href="#" className="text-blue-600 hover:underline">privacy policy</a>.
-              </p>
             </div>
           </div>
         </div>
