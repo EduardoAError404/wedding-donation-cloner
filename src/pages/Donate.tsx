@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Heart, ArrowLeft, Shield, CreditCard, Lock, Golf, Trophy, Users, Target } from "lucide-react";
+import { Heart, ArrowLeft, Shield, CreditCard, Lock, Target, Trophy, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Donate = () => {
@@ -48,7 +47,7 @@ const Donate = () => {
             <div className="bg-gradient-to-br from-green-800 to-green-600 rounded-lg shadow-sm p-8 text-white">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                  <Golf className="h-8 w-8 text-green-600" />
+                  <Target className="h-8 w-8 text-green-600" />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold">Experience an Unforgettable Day</h2>
