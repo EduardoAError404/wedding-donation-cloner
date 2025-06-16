@@ -1,26 +1,64 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Heart, ArrowLeft, Shield, CreditCard, Lock, Target, Trophy, Users } from "lucide-react";
+import { Heart, ArrowLeft, Shield, Lock, Target, Trophy, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Donate = () => {
   const [donationAmount, setDonationAmount] = useState("50");
   const [customAmount, setCustomAmount] = useState("");
   const [tipAmount, setTipAmount] = useState("3");
-  const [paymentMethod, setPaymentMethod] = useState("card");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [showTip, setShowTip] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const presetAmounts = ["25", "50", "100", "250", "500"];
   const tipOptions = ["0", "3", "5", "10"];
 
   const finalAmount = customAmount || donationAmount;
   const totalAmount = parseFloat(finalAmount) + parseFloat(tipAmount);
+
+  const handleDonate = async () => {
+    if (!firstName || !lastName || !email) {
+      setMessage("Please fill in all required fields.");
+      return;
+    }
+
+    setIsLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("http://localhost:3000/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: Math.round(totalAmount * 100), // Convert to cents
+          email: email,
+          name: `${firstName} ${lastName}`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        window.location.href = data.url; // Redirect to Stripe Checkout
+      } else {
+        setMessage(data.error || "An error occurred while creating the payment session.");
+      }
+    } catch (error) {
+      setMessage("Connection error. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -89,54 +127,94 @@ const Donate = () => {
               
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-sm text-gray-600">
-                  <span>€18,750 arrecadados</span>
-                  <span>€25,000 meta</span>
+                  <span>€18,750 raised</span>
+                  <span>€25,000 goal</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div className="bg-green-600 h-2 rounded-full" style={{ width: '75%' }}></div>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
-                  <span>156 doações</span>
-                  <span>12 dias restantes</span>
+                  <span>156 donations</span>
+                  <span>12 days left</span>
                 </div>
               </div>
 
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                <h4 className="font-semibold text-green-800 mb-2">Como Funciona</h4>
+                <h4 className="font-semibold text-green-800 mb-2">How It Works</h4>
                 <div className="space-y-2 text-sm text-green-700">
                   <div className="flex items-center">
                     <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-3">1</div>
-                    <span>Faça sua doação</span>
+                    <span>Make your donation</span>
                   </div>
                   <div className="flex items-center">
                     <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-3">2</div>
-                    <span>Receba sua confirmação</span>
+                    <span>Receive your confirmation</span>
                   </div>
                   <div className="flex items-center">
                     <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-3">3</div>
-                    <span>Ajude quem mais precisa</span>
+                    <span>Help those who need it most</span>
                   </div>
                 </div>
               </div>
 
+              {/* Updated Donation Rewards Table */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="font-semibold text-blue-800 mb-2">Prêmios por Doação</h4>
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="text-blue-700">
-                    <strong>€100+</strong><br />
-                    Certificado digital
+                <h4 className="font-semibold text-blue-800 mb-4">Donation Rewards</h4>
+                <div className="space-y-4 text-sm">
+                  <div className="border-b border-blue-200 pb-3">
+                    <div className="font-semibold text-blue-800 mb-2">€100+</div>
+                    <div className="space-y-1 text-blue-700">
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>
+                        <span>Digital certificate</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>
+                        <span>Premium keychain</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-blue-700">
-                    <strong>€250+</strong><br />
-                    Kit exclusivo + certificado
+                  
+                  <div className="border-b border-blue-200 pb-3">
+                    <div className="font-semibold text-blue-800 mb-2">€250+</div>
+                    <div className="space-y-1 text-blue-700">
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>
+                        <span>Official event t-shirt</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>
+                        <span>Signed cap</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-blue-700">
-                    <strong>€500+</strong><br />
-                    Convite VIP para evento
+                  
+                  <div className="border-b border-blue-200 pb-3">
+                    <div className="font-semibold text-blue-800 mb-2">€500+</div>
+                    <div className="space-y-1 text-blue-700">
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>
+                        <span>Golf gift box</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>
+                        <span>VIP dinner</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-blue-700">
-                    <strong>€1000+</strong><br />
-                    Experiência completa de golfe
+                  
+                  <div>
+                    <div className="font-semibold text-blue-800 mb-2">Major Donor</div>
+                    <div className="space-y-1 text-blue-700">
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>
+                        <span>Custom golf driver</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>
+                        <span>Special mention</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -144,22 +222,22 @@ const Donate = () => {
 
             {/* About the Cause */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-semibold mb-4">Sobre Nossa Causa</h3>
+              <h3 className="text-xl font-semibold mb-4">About Our Cause</h3>
               <div className="prose text-gray-700">
                 <p className="mb-4">
-                  100% das doações vão para a Children's Health Foundation através da nossa plataforma GoFundMe,
-                  ajudando famílias registradas em nosso sistema que enfrentam dificuldades.
+                  100% of donations go to the Children's Health Foundation through our GoFundMe platform,
+                  helping families registered in our system who are facing difficulties.
                 </p>
                 <p className="mb-4">
-                  Nossa missão é conectar pessoas generosas com aqueles que mais precisam de apoio em nossa comunidade.
-                  Cada doação faz a diferença na vida de uma família.
+                  Our mission is to connect generous people with those who need support most in our community.
+                  Every donation makes a difference in a family's life.
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 mb-2">
-                    <strong>Transparência Total:</strong> Acompanhe como sua doação está sendo usada através de relatórios regulares.
+                    <strong>Full Transparency:</strong> Track how your donation is being used through regular reports.
                   </p>
                   <p className="text-sm text-gray-600">
-                    <strong>Impacto Direto:</strong> Conectamos diretamente doadores com beneficiários verificados.
+                    <strong>Direct Impact:</strong> We directly connect donors with verified beneficiaries.
                   </p>
                 </div>
               </div>
@@ -170,9 +248,9 @@ const Donate = () => {
               <div className="flex items-start space-x-3">
                 <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
                 <div>
-                  <h3 className="font-medium text-blue-900">Sua doação está protegida</h3>
+                  <h3 className="font-medium text-blue-900">Your donation is protected</h3>
                   <p className="text-sm text-blue-700 mt-1">
-                    Garantimos reembolso total por até um ano no caso raro de fraude.
+                    We guarantee full refund for up to one year in the rare case of fraud.
                   </p>
                 </div>
               </div>
@@ -181,13 +259,13 @@ const Donate = () => {
 
           {/* Right Side - Donation Form */}
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-2xl font-bold mb-6">Faça sua doação</h2>
+            <h2 className="text-2xl font-bold mb-6">Make your donation</h2>
 
             <div className="space-y-6">
               {/* Amount Selection */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Quanto você gostaria de doar?
+                  How much would you like to donate?
                 </label>
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   {presetAmounts.map((amount) => (
@@ -209,7 +287,7 @@ const Donate = () => {
                   <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">€</span>
                   <Input
                     type="number"
-                    placeholder="Outro valor"
+                    placeholder="Other amount"
                     value={customAmount}
                     onChange={(e) => setCustomAmount(e.target.value)}
                     className="pl-8 text-lg h-12"
@@ -220,19 +298,19 @@ const Donate = () => {
               {/* Tip Section */}
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-medium">Taxa de Serviço GoFundMe</span>
+                  <span className="font-medium">GoFundMe Service Fee</span>
                   <Button 
                     variant="link" 
                     className="p-0 h-auto text-sm"
                     onClick={() => setShowTip(!showTip)}
                   >
-                    Saiba mais
+                    Learn more
                   </Button>
                 </div>
                 
                 {showTip && (
                   <p className="text-sm text-gray-600 mb-3">
-                    GoFundMe tem taxa 0% para organizadores. Uma contribuição voluntária ajuda a manter GoFundMe funcionando.
+                    GoFundMe has 0% fee for organizers. A voluntary contribution helps keep GoFundMe running.
                   </p>
                 )}
 
@@ -255,24 +333,26 @@ const Donate = () => {
 
               {/* Personal Information */}
               <div className="space-y-4">
-                <h3 className="font-medium">Informações pessoais</h3>
+                <h3 className="font-medium">Personal information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName">Nome</Label>
+                    <Label htmlFor="firstName">First Name</Label>
                     <Input
                       id="firstName"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="Nome"
+                      placeholder="First name"
+                      required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="lastName">Sobrenome</Label>
+                    <Label htmlFor="lastName">Last Name</Label>
                     <Input
                       id="lastName"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      placeholder="Sobrenome"
+                      placeholder="Last name"
+                      required
                     />
                   </div>
                 </div>
@@ -283,57 +363,70 @@ const Donate = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Endereço de email"
+                    placeholder="Email address"
+                    required
                   />
                 </div>
-              </div>
-
-              {/* Payment Method */}
-              <div>
-                <h3 className="font-medium mb-3">Método de pagamento</h3>
-                <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                    <RadioGroupItem value="card" id="card" />
-                    <CreditCard className="h-5 w-5" />
-                    <Label htmlFor="card" className="flex-1">Cartão de crédito ou débito</Label>
-                  </div>
-                </RadioGroup>
               </div>
 
               {/* Total Summary */}
               <div className="bg-gray-50 rounded-lg p-4 space-y-2">
                 <div className="flex justify-between">
-                  <span>Sua doação</span>
+                  <span>Your donation</span>
                   <span className="font-medium">€{finalAmount}</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
-                  <span>Taxa GoFundMe</span>
+                  <span>GoFundMe fee</span>
                   <span>€{tipAmount}</span>
                 </div>
                 <hr className="my-2" />
                 <div className="flex justify-between font-semibold text-lg">
-                  <span>Total hoje</span>
+                  <span>Total today</span>
                   <span>€{totalAmount.toFixed(2)}</span>
                 </div>
               </div>
 
+              {/* Error/Success Message */}
+              {message && (
+                <div className={`p-3 rounded-lg text-sm ${
+                  message.includes("error") || message.includes("Please") 
+                    ? "bg-red-50 text-red-700 border border-red-200" 
+                    : "bg-green-50 text-green-700 border border-green-200"
+                }`}>
+                  {message}
+                </div>
+              )}
+
               {/* Donate Button */}
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-4 text-lg">
-                <Heart className="w-5 h-5 mr-2" />
-                Doar €{totalAmount.toFixed(2)}
+              <Button 
+                onClick={handleDonate}
+                disabled={isLoading}
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-4 text-lg disabled:opacity-50"
+              >
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Processing...
+                  </div>
+                ) : (
+                  <>
+                    <Heart className="w-5 h-5 mr-2" />
+                    Donate €{totalAmount.toFixed(2)}
+                  </>
+                )}
               </Button>
 
               {/* Security Notice */}
               <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
                 <Lock className="h-4 w-4" />
-                <span>Suas informações de pagamento são seguras e criptografadas</span>
+                <span>Your payment information is secure and encrypted</span>
               </div>
 
               {/* Terms */}
               <p className="text-xs text-gray-500 text-center">
-                Ao continuar, você concorda com os{" "}
-                <a href="#" className="text-blue-600 hover:underline">termos</a> e{" "}
-                <a href="#" className="text-blue-600 hover:underline">política de privacidade</a> do GoFundMe.
+                By continuing, you agree to GoFundMe's{" "}
+                <a href="#" className="text-blue-600 hover:underline">terms</a> and{" "}
+                <a href="#" className="text-blue-600 hover:underline">privacy policy</a>.
               </p>
             </div>
           </div>
