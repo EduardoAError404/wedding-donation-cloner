@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Heart, Loader2 } from "lucide-react";
 
@@ -18,45 +18,14 @@ declare global {
 }
 
 const StripePayment = ({ amount, tipAmount, firstName, lastName, email }: StripePaymentProps) => {
-  const [stripe, setStripe] = useState<any>(null);
-  const [elements, setElements] = useState<any>(null);
-  const [cardElement, setCardElement] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const cardElementRef = useRef<HTMLDivElement>(null);
 
   const totalAmount = amount + tipAmount;
 
-  useEffect(() => {
-    if (window.Stripe) {
-      const stripeInstance = window.Stripe("pk_test_51234567890abcdef"); // Replace with your publishable key
-      setStripe(stripeInstance);
-      
-      const elementsInstance = stripeInstance.elements();
-      setElements(elementsInstance);
-
-      const card = elementsInstance.create("card", {
-        style: {
-          base: {
-            fontSize: "16px",
-            color: "#424770",
-            "::placeholder": {
-              color: "#aab7c4",
-            },
-          },
-        },
-      });
-
-      if (cardElementRef.current) {
-        card.mount(cardElementRef.current);
-        setCardElement(card);
-      }
-    }
-  }, []);
-
-  const createPaymentIntent = async () => {
+  const createCheckoutSession = async () => {
     try {
-      const response = await fetch("/api/create-payment-intent", {
+      const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,23 +39,21 @@ const StripePayment = ({ amount, tipAmount, firstName, lastName, email }: Stripe
       });
 
       const data = await response.json();
-      return data.clientSecret;
+      return data.sessionId;
     } catch (error) {
-      console.error("Error creating payment intent:", error);
+      console.error("Error creating checkout session:", error);
       throw error;
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!stripe || !elements || !cardElement) {
-      setMessage("Stripe não foi carregado corretamente.");
+  const handleDonate = async () => {
+    if (!firstName || !lastName || !email) {
+      setMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    if (!firstName || !lastName || !email) {
-      setMessage("Por favor, preencha todos os campos obrigatórios.");
+    if (!window.Stripe) {
+      setMessage("Stripe não foi carregado corretamente.");
       return;
     }
 
@@ -94,23 +61,15 @@ const StripePayment = ({ amount, tipAmount, firstName, lastName, email }: Stripe
     setMessage("");
 
     try {
-      const clientSecret = await createPaymentIntent();
+      const stripe = window.Stripe("pk_test_51234567890abcdef"); // Replace with your publishable key
+      const sessionId = await createCheckoutSession();
 
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: `${firstName} ${lastName}`,
-            email: email,
-          },
-        },
+      const result = await stripe.redirectToCheckout({
+        sessionId: sessionId,
       });
 
       if (result.error) {
-        setMessage(result.error.message || "Ocorreu um erro no pagamento.");
-      } else {
-        setMessage("Pagamento realizado com sucesso! Obrigado pela sua doação.");
-        // Here you could redirect or show success message
+        setMessage(result.error.message || "Erro ao redirecionar para o pagamento.");
       }
     } catch (error) {
       setMessage("Erro ao processar pagamento. Tente novamente.");
@@ -122,33 +81,17 @@ const StripePayment = ({ amount, tipAmount, firstName, lastName, email }: Stripe
 
   return (
     <div className="space-y-4">
-      {/* Card Element */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Informações do cartão
-        </label>
-        <div 
-          ref={cardElementRef}
-          className="p-3 border border-gray-300 rounded-md bg-white"
-          style={{ minHeight: "40px" }}
-        />
-      </div>
-
       {/* Payment Message */}
       {message && (
-        <div className={`p-3 rounded-md text-sm ${
-          message.includes("sucesso") 
-            ? "bg-green-50 text-green-700 border border-green-200" 
-            : "bg-red-50 text-red-700 border border-red-200"
-        }`}>
+        <div className="p-3 rounded-md text-sm bg-red-50 text-red-700 border border-red-200">
           {message}
         </div>
       )}
 
       {/* Submit Button */}
       <Button 
-        onClick={handleSubmit}
-        disabled={isLoading || !stripe}
+        onClick={handleDonate}
+        disabled={isLoading}
         className="w-full bg-green-600 hover:bg-green-700 text-white py-4 text-lg"
       >
         {isLoading ? (
