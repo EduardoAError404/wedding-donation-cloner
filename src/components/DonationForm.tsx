@@ -23,21 +23,21 @@ const DonationForm = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
-      <h2 className="text-xl font-semibold mb-4">Make a donation</h2>
+    <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 sticky top-20 sm:top-24">
+      <h2 className="text-lg sm:text-xl font-semibold mb-4">Make a donation</h2>
       
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Enter your donation
           </label>
-          <div className="grid grid-cols-3 gap-2 mb-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
             {presetAmounts.map((amount) => (
               <Button
                 key={amount}
                 variant={selectedAmount === amount ? "default" : "outline"}
                 onClick={() => handleAmountSelect(amount)}
-                className={selectedAmount === amount ? "bg-green-600 hover:bg-green-700" : ""}
+                className={`text-sm ${selectedAmount === amount ? "bg-green-600 hover:bg-green-700" : ""}`}
               >
                 ${amount}
               </Button>
@@ -56,7 +56,7 @@ const DonationForm = () => {
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="bg-gray-50 p-3 sm:p-4 rounded-lg">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm">Your donation</span>
             <span className="font-semibold">${customAmount || selectedAmount}</span>
@@ -85,7 +85,7 @@ const DonationForm = () => {
           <hr className="my-3" />
           
           <div className="flex items-center justify-between font-semibold">
-            <span>Total due today</span>
+            <span className="text-sm sm:text-base">Total due today</span>
             <span>${(parseFloat(customAmount) || selectedAmount) + 3}</span>
           </div>
         </div>

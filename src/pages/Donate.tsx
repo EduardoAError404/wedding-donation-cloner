@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,31 +64,31 @@ const Donate = () => {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-14 sm:h-16">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center text-gray-600 hover:text-gray-900 mr-6">
-                <ArrowLeft className="h-5 w-5 mr-2" />
-                Back
+              <Link to="/" className="flex items-center text-gray-600 hover:text-gray-900 mr-4 sm:mr-6">
+                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                <span className="text-sm sm:text-base">Back</span>
               </Link>
-              <h1 className="text-2xl font-bold text-green-600">GoFundMe</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-green-600">GoFundMe</h1>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Left Side - Campaign Info */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Hero Section */}
-            <div className="bg-gradient-to-br from-green-800 to-green-600 rounded-lg shadow-sm p-8 text-white">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                  <Target className="h-8 w-8 text-green-600" />
+            <div className="bg-gradient-to-br from-green-800 to-green-600 rounded-lg shadow-sm p-6 sm:p-8 text-white">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center mx-auto sm:mx-0">
+                  <Target className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
                 </div>
-                <div>
-                  <h2 className="text-2xl font-bold">Experience an Unforgettable Day</h2>
-                  <p className="text-green-100">A VIP Golf & Charity Experience</p>
+                <div className="text-center sm:text-left">
+                  <h2 className="text-xl sm:text-2xl font-bold">Experience an Unforgettable Day</h2>
+                  <p className="text-green-100 text-sm sm:text-base">A VIP Golf & Charity Experience</p>
                 </div>
               </div>
               
@@ -101,29 +100,29 @@ const Donate = () => {
                 />
               </div>
 
-              <p className="text-lg mb-4">
+              <p className="text-base sm:text-lg mb-4 text-center sm:text-left">
                 Join us for a legendary golf experience while supporting those in need through our community platform.
               </p>
 
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="bg-white/10 rounded-lg p-3">
-                  <Trophy className="h-6 w-6 mx-auto mb-2" />
-                  <div className="text-sm">Professional Instruction</div>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                <div className="bg-white/10 rounded-lg p-2 sm:p-3">
+                  <Trophy className="h-4 w-4 sm:h-6 sm:w-6 mx-auto mb-1 sm:mb-2" />
+                  <div className="text-xs sm:text-sm">Professional Instruction</div>
                 </div>
-                <div className="bg-white/10 rounded-lg p-3">
-                  <Users className="h-6 w-6 mx-auto mb-2" />
-                  <div className="text-sm">Networking</div>
+                <div className="bg-white/10 rounded-lg p-2 sm:p-3">
+                  <Users className="h-4 w-4 sm:h-6 sm:w-6 mx-auto mb-1 sm:mb-2" />
+                  <div className="text-xs sm:text-sm">Networking</div>
                 </div>
-                <div className="bg-white/10 rounded-lg p-3">
-                  <Target className="h-6 w-6 mx-auto mb-2" />
-                  <div className="text-sm">Charity Impact</div>
+                <div className="bg-white/10 rounded-lg p-2 sm:p-3">
+                  <Target className="h-4 w-4 sm:h-6 sm:w-6 mx-auto mb-1 sm:mb-2" />
+                  <div className="text-xs sm:text-sm">Charity Impact</div>
                 </div>
               </div>
             </div>
 
             {/* Campaign Details */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-semibold mb-4">Supporting Our Community</h3>
+            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-semibold mb-4">Supporting Our Community</h3>
               
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-sm text-gray-600">
@@ -143,24 +142,24 @@ const Donate = () => {
                 <h4 className="font-semibold text-green-800 mb-2">How It Works</h4>
                 <div className="space-y-2 text-sm text-green-700">
                   <div className="flex items-center">
-                    <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-3">1</div>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-2 sm:mr-3 flex-shrink-0">1</div>
                     <span>Make your donation</span>
                   </div>
                   <div className="flex items-center">
-                    <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-3">2</div>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-2 sm:mr-3 flex-shrink-0">2</div>
                     <span>Receive your confirmation</span>
                   </div>
                   <div className="flex items-center">
-                    <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-3">3</div>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-2 sm:mr-3 flex-shrink-0">3</div>
                     <span>Help those who need it most</span>
                   </div>
                 </div>
               </div>
 
-              {/* Updated Donation Rewards Table */}
+              {/* Donation Rewards Table */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h4 className="font-semibold text-blue-800 mb-4">Donation Rewards</h4>
-                <div className="space-y-4 text-sm">
+                <div className="space-y-3 sm:space-y-4 text-sm">
                   <div className="border-b border-blue-200 pb-3">
                     <div className="font-semibold text-blue-800 mb-2">€100+</div>
                     <div className="space-y-1 text-blue-700">
@@ -221,14 +220,14 @@ const Donate = () => {
             </div>
 
             {/* About the Cause */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-semibold mb-4">About Our Cause</h3>
-              <div className="prose text-gray-700">
-                <p className="mb-4">
+            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-semibold mb-4">About Our Cause</h3>
+              <div className="prose max-w-none text-sm sm:text-base">
+                <p className="text-gray-700 mb-4">
                   100% of donations go to the Children's Health Foundation through our GoFundMe platform,
                   helping families registered in our system who are facing difficulties.
                 </p>
-                <p className="mb-4">
+                <p className="text-gray-700 mb-4">
                   Our mission is to connect generous people with those who need support most in our community.
                   Every donation makes a difference in a family's life.
                 </p>
@@ -246,7 +245,7 @@ const Donate = () => {
             {/* Security Info */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
+                <Shield className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                 <div>
                   <h3 className="font-medium text-blue-900">Your donation is protected</h3>
                   <p className="text-sm text-blue-700 mt-1">
@@ -258,8 +257,8 @@ const Donate = () => {
           </div>
 
           {/* Right Side - Donation Form */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-2xl font-bold mb-6">Make your donation</h2>
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 h-fit lg:sticky lg:top-24">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6">Make your donation</h2>
 
             <div className="space-y-6">
               {/* Amount Selection */}
@@ -267,7 +266,7 @@ const Donate = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   How much would you like to donate?
                 </label>
-                <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4">
                   {presetAmounts.map((amount) => (
                     <Button
                       key={amount}
@@ -276,7 +275,7 @@ const Donate = () => {
                         setDonationAmount(amount);
                         setCustomAmount("");
                       }}
-                      className={donationAmount === amount && !customAmount ? "bg-green-600 hover:bg-green-700" : ""}
+                      className={`text-sm ${donationAmount === amount && !customAmount ? "bg-green-600 hover:bg-green-700" : ""}`}
                     >
                       €{amount}
                     </Button>
@@ -298,7 +297,7 @@ const Donate = () => {
               {/* Tip Section */}
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-medium">GoFundMe Service Fee</span>
+                  <span className="font-medium text-sm sm:text-base">GoFundMe Service Fee</span>
                   <Button 
                     variant="link" 
                     className="p-0 h-auto text-sm"
@@ -314,13 +313,13 @@ const Donate = () => {
                   </p>
                 )}
 
-                <RadioGroup value={tipAmount} onValueChange={setTipAmount} className="grid grid-cols-4 gap-2">
+                <RadioGroup value={tipAmount} onValueChange={setTipAmount} className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {tipOptions.map((tip) => (
                     <div key={tip} className="flex items-center space-x-2">
                       <RadioGroupItem value={tip} id={`tip-${tip}`} className="sr-only" />
                       <Label 
                         htmlFor={`tip-${tip}`} 
-                        className={`cursor-pointer border rounded-lg p-2 text-center w-full ${
+                        className={`cursor-pointer border rounded-lg p-2 text-center w-full text-sm ${
                           tipAmount === tip ? 'bg-green-100 border-green-500' : 'bg-white border-gray-300'
                         }`}
                       >
@@ -334,7 +333,7 @@ const Donate = () => {
               {/* Personal Information */}
               <div className="space-y-4">
                 <h3 className="font-medium">Personal information</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="firstName">First Name</Label>
                     <Input
@@ -371,7 +370,7 @@ const Donate = () => {
 
               {/* Total Summary */}
               <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                <div className="flex justify-between">
+                <div className="flex justify-between text-sm sm:text-base">
                   <span>Your donation</span>
                   <span className="font-medium">€{finalAmount}</span>
                 </div>
@@ -380,7 +379,7 @@ const Donate = () => {
                   <span>€{tipAmount}</span>
                 </div>
                 <hr className="my-2" />
-                <div className="flex justify-between font-semibold text-lg">
+                <div className="flex justify-between font-semibold text-base sm:text-lg">
                   <span>Total today</span>
                   <span>€{totalAmount.toFixed(2)}</span>
                 </div>
@@ -418,8 +417,8 @@ const Donate = () => {
 
               {/* Security Notice */}
               <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                <Lock className="h-4 w-4" />
-                <span>Your payment information is secure and encrypted</span>
+                <Lock className="h-4 w-4 flex-shrink-0" />
+                <span className="text-center">Your payment information is secure and encrypted</span>
               </div>
 
               {/* Terms */}

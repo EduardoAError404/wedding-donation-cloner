@@ -14,26 +14,26 @@ const CampaignHero = () => {
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
       </div>
       
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <div className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
               Enilio & Marta Wedding
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm sm:text-base">
               Help us celebrate our special day by contributing to our dream wedding
             </p>
           </div>
           
-          <div className="flex space-x-2">
-            <Button variant="outline" size="icon">
-              <Heart className="h-4 w-4" />
+          <div className="flex space-x-2 justify-end sm:justify-start">
+            <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
+              <Heart className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="outline" size="icon">
-              <Share className="h-4 w-4" />
+            <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
+              <Share className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-            <Button variant="outline" size="icon">
-              <Flag className="h-4 w-4" />
+            <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
+              <Flag className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
           </div>
         </div>
@@ -54,10 +54,10 @@ const CampaignHero = () => {
 
         <div className="flex items-center space-x-4 text-sm text-gray-600">
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-semibold mr-2">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-semibold mr-2 text-xs sm:text-sm">
               E
             </div>
-            <span>Enilio Martinez is organizing this fundraiser</span>
+            <span className="text-xs sm:text-sm">Enilio Martinez is organizing this fundraiser</span>
           </div>
         </div>
       </div>

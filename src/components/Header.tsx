@@ -6,10 +6,10 @@ const Header = () => {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <h1 className="text-2xl font-bold text-green-600">GoFundMe</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-green-600">GoFundMe</h1>
             </div>
           </div>
           
@@ -26,15 +26,16 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" className="text-gray-700 hover:text-green-600">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <Button variant="ghost" className="hidden sm:inline-flex text-gray-700 hover:text-green-600 text-sm">
               How it works
             </Button>
-            <Button variant="ghost" className="text-gray-700 hover:text-green-600">
+            <Button variant="ghost" className="hidden sm:inline-flex text-gray-700 hover:text-green-600 text-sm">
               Sign in
             </Button>
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
-              Start a GoFundMe
+            <Button className="bg-green-600 hover:bg-green-700 text-white text-sm px-3 sm:px-4">
+              <span className="hidden sm:inline">Start a GoFundMe</span>
+              <span className="sm:hidden">Start</span>
             </Button>
             <Button variant="ghost" size="icon" className="md:hidden">
               <Menu className="h-5 w-5" />
