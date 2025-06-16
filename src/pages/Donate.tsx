@@ -1,9 +1,10 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Heart, ArrowLeft, Shield, Lock, Target, Trophy, Users } from "lucide-react";
+import { Heart, ArrowLeft, Shield, Lock, Target, Trophy, Users, Gift, Clock, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Donate = () => {
@@ -16,6 +17,7 @@ const Donate = () => {
   const [showTip, setShowTip] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({ firstName: false, lastName: false, email: false });
 
   const presetAmounts = ["25", "50", "100", "250", "500"];
   const tipOptions = ["0", "3", "5", "10"];
@@ -23,9 +25,19 @@ const Donate = () => {
   const finalAmount = customAmount || donationAmount;
   const totalAmount = parseFloat(finalAmount) + parseFloat(tipAmount);
 
+  const validateFields = () => {
+    const errors = {
+      firstName: !firstName.trim(),
+      lastName: !lastName.trim(),
+      email: !email.trim() || !/\S+@\S+\.\S+/.test(email)
+    };
+    setFieldErrors(errors);
+    return !Object.values(errors).some(error => error);
+  };
+
   const handleDonate = async () => {
-    if (!firstName || !lastName || !email) {
-      setMessage("Please fill in all required fields.");
+    if (!validateFields()) {
+      setMessage("Please fill in all required fields correctly.");
       return;
     }
 
@@ -39,7 +51,7 @@ const Donate = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: Math.round(totalAmount * 100), // Convert to cents
+          amount: Math.round(totalAmount * 100),
           email: email,
           name: `${firstName} ${lastName}`,
         }),
@@ -48,7 +60,7 @@ const Donate = () => {
       const data = await response.json();
 
       if (response.ok) {
-        window.location.href = data.url; // Redirect to Stripe Checkout
+        window.location.href = data.url;
       } else {
         setMessage(data.error || "An error occurred while creating the payment session.");
       }
@@ -56,6 +68,15 @@ const Donate = () => {
       setMessage("Connection error. Please try again.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const isFieldValid = (field) => {
+    switch (field) {
+      case 'firstName': return firstName.trim() && !fieldErrors.firstName;
+      case 'lastName': return lastName.trim() && !fieldErrors.lastName;
+      case 'email': return email.trim() && /\S+@\S+\.\S+/.test(email) && !fieldErrors.email;
+      default: return false;
     }
   };
 
@@ -260,6 +281,30 @@ const Donate = () => {
           <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 h-fit lg:sticky lg:top-24">
             <h2 className="text-xl sm:text-2xl font-bold mb-6">Make your donation</h2>
 
+            {/* What You Get Section */}
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4 mb-6">
+              <div className="flex items-start space-x-3">
+                <Gift className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-green-800 mb-2">🎁 By donating €100+, you guarantee:</h4>
+                  <div className="space-y-1 text-sm text-green-700">
+                    <div className="flex items-center">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <span>Exclusive auction invitation</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <span>Premium donation rewards</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <span>Chance to experience a day with a golf legend</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="space-y-6">
               {/* Amount Selection */}
               <div>
@@ -336,35 +381,81 @@ const Donate = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="firstName">First Name</Label>
-                    <Input
-                      id="firstName"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="First name"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => {
+                          setFirstName(e.target.value);
+                          if (fieldErrors.firstName && e.target.value.trim()) {
+                            setFieldErrors(prev => ({ ...prev, firstName: false }));
+                          }
+                        }}
+                        placeholder="First name"
+                        required
+                        className={`${fieldErrors.firstName ? 'border-red-500' : isFieldValid('firstName') ? 'border-green-500' : ''}`}
+                      />
+                      {isFieldValid('firstName') && (
+                        <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
+                      )}
+                    </div>
                   </div>
                   <div>
                     <Label htmlFor="lastName">Last Name</Label>
-                    <Input
-                      id="lastName"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      placeholder="Last name"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => {
+                          setLastName(e.target.value);
+                          if (fieldErrors.lastName && e.target.value.trim()) {
+                            setFieldErrors(prev => ({ ...prev, lastName: false }));
+                          }
+                        }}
+                        placeholder="Last name"
+                        required
+                        className={`${fieldErrors.lastName ? 'border-red-500' : isFieldValid('lastName') ? 'border-green-500' : ''}`}
+                      />
+                      {isFieldValid('lastName') && (
+                        <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div>
                   <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email address"
-                    required
-                  />
+                  <div className="relative">
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (fieldErrors.email && /\S+@\S+\.\S+/.test(e.target.value)) {
+                          setFieldErrors(prev => ({ ...prev, email: false }));
+                        }
+                      }}
+                      placeholder="Email address"
+                      required
+                      className={`${fieldErrors.email ? 'border-red-500' : isFieldValid('email') ? 'border-green-500' : ''}`}
+                    />
+                    {isFieldValid('email') && (
+                      <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
+                    )}
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">
+                  📬 Your name will only be used to send the exclusive auction link.
+                </p>
+              </div>
+
+              {/* Urgency Notice */}
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-4 w-4 text-orange-600 flex-shrink-0" />
+                  <p className="text-sm text-orange-800">
+                    ⏳ Last spots for the auction — secure yours before July 21st!
+                  </p>
                 </div>
               </div>
 
@@ -396,6 +487,16 @@ const Donate = () => {
                 </div>
               )}
 
+              {/* Security Trust Badge */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                <div className="flex items-center space-x-2">
+                  <Shield className="h-5 w-5 text-green-600 flex-shrink-0" />
+                  <p className="text-sm text-green-800 font-medium">
+                    🔒 100% secure transaction via Stripe — the world's leading payment platform.
+                  </p>
+                </div>
+              </div>
+
               {/* Donate Button */}
               <Button 
                 onClick={handleDonate}
@@ -410,7 +511,7 @@ const Donate = () => {
                 ) : (
                   <>
                     <Heart className="w-5 h-5 mr-2" />
-                    Donate €{totalAmount.toFixed(2)}
+                    Complete my donation - €{totalAmount.toFixed(2)}
                   </>
                 )}
               </Button>
